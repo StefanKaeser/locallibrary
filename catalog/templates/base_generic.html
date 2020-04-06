@@ -30,6 +30,8 @@
          <hr>
          <li> {{ user.groups.all.0 }}</li>
          <li><a href="{% url 'all-borrowed' %}">All Borrowed</a></li>
+         <li><a href="{% url 'book_create' %}">Create Book</a></li>
+         <li><a href="{% url 'author_create' %}">Create Author</a></li>
         {% endif %} 
         </ul>
      {% endblock %}

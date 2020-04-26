@@ -10,11 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+import dj_database_url
+import django_heroku
 import psycopg2
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
 # Quick-start development settings - unsuitable for production
@@ -35,12 +38,16 @@ ALLOWED_HOSTS = ['127.0.0.1', "local-library-260420.herokuapp.com"]
 # Application definition
 
 INSTALLED_APPS = [
+    # Disable Django's own staticfiles handling in favour of WhiteNoise, for
+    # greater consistency between gunicorn and `./manage.py runserver`. See:
+    # http://whitenoise.evans.io/en/stable/django.html#using-whitenoise-in-development
+    'whitenoise.runserver_nostatic',
+    'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
     'catalog'
 ]
 
@@ -136,14 +143,14 @@ DATABASES['default'].update(db_from_env)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 # The absolute path to the directory where collectstatic will collect static files for deployment.
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
 # The URL to use when referring to static files (where they will be served from)
 STATIC_URL = '/static/'
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
-STATICFILES_STORAGE = 'locallibrary.storage.WhiteNoiseStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Logging
 
